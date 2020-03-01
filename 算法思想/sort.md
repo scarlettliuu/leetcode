@@ -125,65 +125,57 @@ public:
 class Solution {
 public:
     string frequencySort(string s) {
-        using pair = pair<char, int>;
-        unordered_map<char, int> hash;
-        auto cmp = [](pair a, pair b) { return a.second < b.second; }; //定义优先级队列的排序规则，使用匿名函数进行
-        priority_queue<pair, vector<pair>, decltype(cmp)> pq(cmp);
-        for(auto c: s) { hash[c]++; }
-        //
-        for(auto it = hash.begin(); it != hash.end(); ++it){
-            pair temp = make_pair(it->first, it->second);
+        //堆排序,此处使用大根堆
+        string res;
+        using  pair = pair<char,int>;
+        unordered_map<char,int> hash;
+        //定义优先队列的排序规则,使用匿名函数
+        auto cmp = [](pair a,pair b){ return a.second<b.second;};
+        priority_queue<pair,vector<pair>,decltype(cmp)> pq(cmp);
+        //统计每个字符出现次数
+        for(char c:s) hash[c]++;
+        //所有键值对入优先队列,即按大根堆排序
+        for(auto it=hash.begin();it!=hash.end();it++){
+            pair temp = make_pair(it->first,it->second);
             pq.push(temp);
         }
-        string res;
         while(!pq.empty()){
-            auto it = pq.top();
-            while(it.second--) { res += it.first; }
+            auto it=pq.top();
+            while(it.second--)
+                res += it.first;
             pq.pop();
         }
         return res;
     }
-};
-```
+};```
 # 荷兰国旗问题
-
-荷兰国旗包含三种颜色：红、白、蓝。
-
-有三种颜色的球，算法的目标是将这三种球按颜色顺序正确地排列。它其实是三向切分快速排序的一种变种，在三向切分快速排序中，每次切分都将数组分成三个区间：小于切分元素、等于切分元素、大于切分元素，而该算法是将数组分成三个区间：等于红色、等于白色、等于蓝色。
-
-<div align="center"> <img src="https://cs-notes-1256109796.cos.ap-guangzhou.myqcloud.com/7a3215ec-6fb7-4935-8b0d-cb408208f7cb.png"/> </div><br>
-
 
 ## 1. 按颜色进行排序
 
 75\. Sort Colors (Medium)
 
-[Leetcode](https://leetcode.com/problems/sort-colors/description/) / [力扣](https://leetcode-cn.com/problems/sort-colors/description/)
-
+[Leetcode](https://leetcode.com/problems/sort-colors/description/)
 ```html
 Input: [2,0,2,1,1,0]
 Output: [0,0,1,1,2,2]
 ```
-
-题目描述：只有 0/1/2 三种颜色。
-
-```java
-public void sortColors(int[] nums) {
-    int zero = -1, one = 0, two = nums.length;
-    while (one < two) {
-        if (nums[one] == 0) {
-            swap(nums, ++zero, one++);
-        } else if (nums[one] == 2) {
-            swap(nums, --two, one);
-        } else {
-            ++one;
+**解法(力扣官方)**
+   用三个指针P0, p2, curr分别追踪0的最右边界, 2的最左边界和当前考虑元素
+   沿着数组移动curr指针,若```html nums[curr]==0```,将其与```html nums[p0]```互换;
+   若```html nums[curr]==2```,则与``` html nums[p2]```互换
+```C++
+class Solution {
+public:
+    void sortColors(vector<int>& nums) {
+        int p0=0, p2=nums.size()-1;
+        int curr=0;
+        while(curr<=p2){
+            if(nums[curr]==0)
+                swap(nums[curr++],nums[p0++]);
+            else if(nums[curr]==2)
+                swap(nums[curr],nums[p2--]);
+            else
+                curr++;
         }
     }
-}
-
-private void swap(int[] nums, int i, int j) {
-    int t = nums[i];
-    nums[i] = nums[j];
-    nums[j] = t;
-}
-```
+};```
