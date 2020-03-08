@@ -7,14 +7,17 @@
 160\. Intersection of Two Linked Lists (Easy)
 [Leetcode](https://leetcode.com/problems/intersection-of-two-linked-lists/description/)
 
-例如以下示例中 A 和 B 两个链表相交于 c1：
+**题目**  
+编写一个程序，找到两个单链表相交的起始节点。  
+如下面的两个链表：  
 ```html
 A:          a1 → a2
                     ↘
                       c1 → c2 → c3
                     ↗
 B:    b1 → b2 → b3
-```
+```  
+在节点 c1 开始相交。  
 **分析**  
 把两个链表相同的部分记为c，相交节点记为*, 则第一个链表记为 a * c, 第二个链表记为b * c  
 两个虚拟链表AB, BA可以记为：  
